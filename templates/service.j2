@@ -8,6 +8,18 @@ Description={{ item.key }} Service
 [Service]
 Type=oneshot
 ExecStart={{ item.value.timer_command }}
+{% if item.value.timer_execStartPre is defined %}
+ExecStartPre={{ item.value.timer_execStartPre }}
+{% endif %}
+{% if item.value.timer_execStartPost is defined %}
+ExecStartPost={{ item.value.timer_execStartPost }}
+{% endif %}
 {% if item.value.timer_user is defined %}
 User={{ item.value.timer_user }}
+{% endif %}
+{% if item.value.timer_restart is defined %}
+Restart={{ item.value.timer_restart }}
+{% endif %}
+{% if item.value.timer_restartSec is defined %}
+RestartSec={{ item.value.timer_restartSec }}
 {% endif %}
