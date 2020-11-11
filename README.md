@@ -36,6 +36,10 @@ That's all the magic.
 | timer_OnUnitInactiveSec | no | Relative time after the service unit was last deactivated |
 | timer_OnCalendar | no | Absolute time when to call activate the unit |
 | timer_AccuracySec | no | Timer have a default accuracy of round about one minute. You can set the accuracy with this var. Default: 15s |
+| timer_restart | no | Configures whether the service shall be restarted when the service process exits, is killed, or a timeout is reached |
+| timer_restartSec | no | Configures the time to sleep before restarting a service |
+| timer_execStartPre | no | Additional commands that are executed before the command in ExecStart= |
+| timer_execStartPost | no | Additional commands that are executed after the command in ExecStart= |
 
 You can chain every timer_On* variable. Example:
 
