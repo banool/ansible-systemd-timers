@@ -7,6 +7,9 @@ Description={{ item.key }} service
 
 [Service]
 Type=oneshot
+{% if item.value.WorkingDirectory is defined %}
+WorkingDirectory={{ item.value.WorkingDirectory }}
+{% endif %}
 {% if item.value.ExecStartPre is defined %}
 ExecStartPre={{ item.value.ExecStartPre }}
 {% endif %}
