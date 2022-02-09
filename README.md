@@ -3,26 +3,46 @@
 ## About
 This roles enables you to create systemd timers which call scripts or execute commands.
 
-## Usage
+## Example
 
-Define a variable ```timers```. This variable is a dictionary. Every key is a new timer.
-
-### Example
-
-Here is an example for my 1337 Telegram Bot. The Timer "calls" a script which sends the message "It's now 13:37" in one of my Telegram chats every day at 13:37 GMT o'Clock.
+The Timer "calls" a script which sends the message "It's now 13:37" in one of my Telegram chats every day at 13:37 GMT.
 
 ```
 timers:
    1337TelegramBot:
-      user: telegrambot
+      userspace: false
       ExecStart: /home/telegrambot/sendMessage.pl
+      User: telegrambot
       OnCalendar: "*-*-* 13:37:00 CET"
       AccuracySec: 5s
 ```
 
-That's all the magic.
+This is an example of the above block in full context within a playbook:
 
-### Existing variables
+```
+- hosts: webservers
+  name: Install timers
+  vars:
+    - timers:
+        1337TelegramBot:
+          userspace: true
+          ExecStart: /home/telegrambot/sendMessage.pl
+          User: telegrambot
+          OnCalendar: "*-*-* 13:37:00 CET"
+          AccuracySec: 5s
+  tasks:
+    - import_role:
+        name: ansible-systemd-timers
+```
+
+To get the role, run the following in your git repo:
+```
+mkdir roles
+cd roles
+git submodule add git@github.com:banool/ansible-systemd-timers.git
+```
+
+## Variables
 
 | Variable | Required |  Default value / Explanation |
 |----------|----------|------------------------------|
@@ -33,7 +53,7 @@ That's all the magic.
 | OnActiveSec | no | Relative time after the timer unit was last activated |
 | OnBootSec | no | Relative time after the computer was booted |
 | OnStartupSec | no | Relative time after systemd was started |
-| OnUnitActiveSec | no | Relative time after the service unit was last activated |
+| OnUnitActiveSec | no | Relative time after the service unit was last activated |
 | OnUnitInactiveSec | no | Relative time after the service unit was last deactivated |
 | OnCalendar | no | Absolute time when to call activate the unit |
 | AccuracySec | no | Timer have a default accuracy of round about one minute. You can set the accuracy with this var. Default: 15s |
