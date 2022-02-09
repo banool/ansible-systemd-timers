@@ -3,29 +3,29 @@
 # Role: systemd-timer
 #
 [Unit]
-Description={{ item.key }} Timer
+Description={{ item.key }} timer
 
 [Timer]
-{% if item.value.timer_OnActiveSec is defined %}
-OnActiveSec={{ item.value.timer_OnActiveSec }}
+{% if item.value.OnActiveSec is defined %}
+OnActiveSec={{ item.value.OnActiveSec }}
 {% endif %}
-{% if item.value.timer_OnBootSec is defined %}
-OnBootSec={{ item.value.timer_OnBootSec }}
+{% if item.value.OnBootSec is defined %}
+OnBootSec={{ item.value.OnBootSec }}
 {% endif %}
-{% if item.value.timer_OnStartupSec is defined %}
-OnStartupSec={{ item.value.timer_OnStartupSec }}
+{% if item.value.OnStartupSec is defined %}
+OnStartupSec={{ item.value.OnStartupSec }}
 {% endif %}
-{% if item.value.timer_OnUnitActiveSec is defined %}
-OnUnitActiveSec={{ item.value.timer_OnUnitActiveSec }}
+{% if item.value.OnUnitActiveSec is defined %}
+OnUnitActiveSec={{ item.value.OnUnitActiveSec }}
 {% endif %}
-{% if item.value.timer_OnUnitInactiveSec is defined %}
-OnUnitInactiveSec={{ item.value.timer_OnUnitInactiveSec }}
+{% if item.value.OnUnitInactiveSec is defined %}
+OnUnitInactiveSec={{ item.value.OnUnitInactiveSec }}
 {% endif %}
-{% if item.value.timer_OnCalendar is defined %}
-OnCalendar={{ item.value.timer_OnCalendar }}
-Persistent={{ item.value.timer_persistent | default('false') }}
+{% if item.value.OnCalendar is defined %}
+OnCalendar={{ item.value.OnCalendar }}
+Persistent={{ item.value.Persistent | default('false') }}
 {% endif %}
-AccuracySec={{ item.value.timer_AccuracySec | default('15s') }}
+AccuracySec={{ item.value.AccuracySec | default('15s') }}
 
 [Install]
 WantedBy=timers.target

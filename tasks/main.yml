@@ -1,43 +1,48 @@
 ---
 - block:
-  - name: Fail when timer_command is undefined
+  - name: Fail when necessary variables are undefined
     fail:
-      msg: Variable timer_command is not defined
-    when: item.value.timer_command is undefined
+      msg: Variables ExecStart or userspace are not defined
+    when: item.value.ExecStart is undefined or item.value.userspace is undefined
+    with_dict: '{{ timers }}'
+
+  - name: Ensure userspace systemd unit directory exists
+    command: "mkdir -p {{ basedir }}"
+    when: item.value.userspace
     with_dict: '{{ timers }}'
 
   - name: Upload service file
+    become: yes
     template:
       src: service.j2
       dest: '{{ basedir }}/{{ item.key }}.service'
       owner: '{{ owner }}'
-      group: '{{ group }}'
+      group: root
       mode: 0644
     with_dict: '{{ timers }}'
-    notify: Reload systemd
 
   - name: Upload timer file
+    become: yes
     template:
       src: timer.j2
       dest: '{{ basedir }}/{{ item.key }}.timer'
       owner: '{{ owner }}'
-      group: '{{ group }}'
+      group: root
       mode: 0644
     with_dict: '{{ timers }}'
-    notify: Reload systemd
 
   - name: Enable timers
+    become: "{{ 'no' if item.value.userspace else 'yes' }}"
     systemd:
       name: '{{ item.key }}.timer'
-      state: started
       enabled: true
-      masked: false
+      state: started
+      scope: "{{ 'user' if item.value.userspace else 'system' }}"
       daemon_reload: true
     with_dict: '{{ timers }}'
 
   when: timers is defined
   vars:
-    basedir: "{{ '/home/{{ USER }}' if item.userspace else '/etc/systemd/system' }}"
-    owner: "{{ {{ USER }} if item.value.userspace else 'root' }}"
-    group: "{{ {{ USER }} if item.value.userspace else 'root' }}"
+    basedir: "{% if item.value.userspace %}/home/{{ ansible_facts['user_id'] }}/.config/systemd/user{% else %}/etc/systemd/system{% endif %}"
+    owner: "{% if item.value.userspace %}{{ ansible_facts['user_id'] }}{% else %}root{% endif %}"
 
