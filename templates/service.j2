@@ -23,3 +23,6 @@ Restart={{ item.value.Restart }}
 {% if item.value.RestartSec is defined %}
 RestartSec={{ item.value.RestartSec }}
 {% endif %}
+{% if item.value.TimeoutStartSec is defined %}
+TimeoutStartSec={{ item.value.TimeoutStartSec }}
+{% endif %}
