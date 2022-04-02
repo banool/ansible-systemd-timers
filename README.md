@@ -47,6 +47,7 @@ git submodule add git@github.com:banool/ansible-systemd-timers.git
 | Variable | Required |  Default value / Explanation |
 |----------|----------|------------------------------|
 | userspace | yes | Takes a boolean argument. If true, install the unit / timer to `/home/$USER/.config/systemd/user/`, otherwise install to `/etc/systemd/system/`. |
+| After | no | Sets After under Unit in the timer file. Can be used to make sure the timer only runs after another unit is up. |
 | ExecStart | yes | Which command or script to execute |
 | User | no | Under which users the command is executed. Default: root (for `userspace=false`) or `$USER` for (`userspace=true`) |
 | Persistent | no | Takes a boolean argument. If true, the time when the service unit was last triggered is stored on disk. When the timer is activated, the service unit is triggered immediately if it would have been triggered at least once during the time when the timer was inactive. This is useful to catch up on missed runs of the service when the machine was off. Note that this setting only has an effect on timers configured with OnCalendar=. Defaults to false. [Source](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) |

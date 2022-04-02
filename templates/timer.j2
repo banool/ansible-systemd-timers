@@ -4,6 +4,9 @@
 #
 [Unit]
 Description={{ item.key }} timer
+{% if item.value.After is defined %}
+After={{ item.value.After }}
+{% endif %}
 
 [Timer]
 Unit={{ item.key }}.service
